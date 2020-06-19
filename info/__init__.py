@@ -1,6 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
+import redis
 from flask import Flask, session
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +10,7 @@ from config import Config,config_dict
 
 db = SQLAlchemy()
 
+redis_store = None
 
 def create_app(config_name):
     # 通过不同的配置名，切换不同的环境
@@ -24,8 +26,8 @@ def create_app(config_name):
     db.init_app(app)
 
     # 初始化redis配置
-
-    # redis.StrictRedis(host=Config.RDIES_HOST, port=Config.RDIES_PORT)
+    global redis_store
+    redis_store = redis.StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT)
 
     # 开启csrf 保护， 只用于服务器验证功能
     CSRFProtect(app)
