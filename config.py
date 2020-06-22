@@ -1,42 +1,42 @@
-import logging
-
 import redis
 
+# 定义配置字典
+import logging
+
+
 class Config(object):
-    #工程信息配置
+    """工程配置信息"""
     SECRET_KEY = "EjpNVSNQTyGi1VvWECj9TvC/+kq3oujee2kTfQUs8yCM6xX9Yjq52v54g+HVoknA"
     DEBUG = True
-    # 导入数据库配置
-    # 设置数据库连接
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:root@127.0.0.1:3306/information'
-    # 动态追踪设置
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
-    # 显示原始sql
-    SQLALCHEMY_ECHO = True
-
+    # 数据库的配置信息
+    SQLALCHEMY_DATABASE_URI = "mysql://root:root@127.0.0.1:3306/information"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     REDIS_HOST = "127.0.0.1"
     REDIS_PORT = 6379
-    #flask_session配置信息
-    SESSION_TYPE = "redis" #指定session保存到redis中
-    SESSION_USE_SIGNER = True #让cookie中的sessionid 被加密处理
-    #使用redis实例
-    SESSION_REDIS = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)
+    # flask_session的配置信息
+    SESSION_TYPE = "redis"  # 指定 session 保存到 redis 中
+    SESSION_USE_SIGNER = True  # 让 cookie 中的 session_id 被加密签名处理
+    SESSION_REDIS = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT)  # 使用 redis 的实例
     SESSION_PERMANENT = False
-    PERMANENT_SESSION_LIFETIME = 86400 #session有效期/秒
-    #日志级别
+    PERMANENT_SESSION_LIFETIME = 86400  # session 的有效期，单位是秒
+    # 设置默认日志级别
     LEVEL = logging.DEBUG
-# 开发环境
+
+
+#开发环境配置信息
 class DevelopConfig(Config):
     pass
-# 生产环境
+
+#生产环境配置信息(线上)
 class ProductConfig(Config):
     DEBUG = False
     LEVEL = logging.ERROR
 
-# 测试环境
+#测试环境配置信息
 class TestingConfig(Config):
     TESTING = True
-# 通过统一的字典进行配置类的访问
+
+#通过字典统一访问配置类
 config_dict = {
     "develop":DevelopConfig,
     "product":ProductConfig,
